@@ -10,11 +10,12 @@ const isProduction = process.env.NODE_ENV == 'production';
 const stylesHandler = isProduction ? MiniCssExtractPlugin.loader : 'style-loader';
 
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 
 const config = {
     entry: {
-      index: './src/index.js',
+      index: './src/index.js', // какие js файлы будут в итоговом бандле, можно перечислить нужное кол-во
     }, 
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -32,7 +33,15 @@ const config = {
           // minify: false,  отменить минификацию
         }),
         
-        new CleanWebpackPlugin()
+        new CleanWebpackPlugin(),
+        new CopyWebpackPlugin({
+          patterns: [
+            {
+              from: path.resolve(__dirname, 'src/'), // дописать путь
+              to: path.resolve(__dirname, 'dist')
+            }
+          ]
+        })
         // Add your plugins here
         // Learn more about plugins from https://webpack.js.org/configuration/plugins/
     ],
